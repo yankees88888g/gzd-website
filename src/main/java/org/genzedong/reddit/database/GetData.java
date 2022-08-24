@@ -1,8 +1,46 @@
 package org.genzedong.reddit.database;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
+import java.io.*;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+
 public class GetData {
 
-    public static void getData() {
+    public static List<FullPostData> getData() throws IOException {
+        try (InputStreamReader postJson = new InputStreamReader(GetData.class.getResourceAsStream("/json/posts.json"), StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(postJson);
+            Type type = new TypeToken<List<Post>>(){}.getType();
+            List<Post> posts = gson.fromJson(br, type);
+            List<FullPostData> fullPostDataList = new ArrayList<>();
+            for(int i = 0; i < posts.size(); i++){
+                Post post = posts.get(i);
+                fullPostDataList.add(new FullPostData(post, getComments(post.id), post.id));
+            }
+            return fullPostDataList;
+        }
+    }
 
+    private static List<Comment> getComments(String postId) throws IOException {
+        try (InputStreamReader CommentJson = new InputStreamReader(GetData.class.getResourceAsStream("/json/comments.json"), StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(CommentJson);
+            Type type = new TypeToken<List<Comment>>() {
+            }.getType();
+            List<Comment> comments = gson.fromJson(br, type);
+            for(int i = 0; i < comments.size(); i++) {
+                Comment comment = comments.get(i);
+                System.out.println(comment.author);
+            }
+            return comments;
+        }
     }
 }
