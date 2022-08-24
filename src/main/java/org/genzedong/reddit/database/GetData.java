@@ -21,8 +21,7 @@ public class GetData {
             Type type = new TypeToken<List<Post>>(){}.getType();
             List<Post> posts = gson.fromJson(br, type);
             List<FullPostData> fullPostDataList = new ArrayList<>();
-            for(int i = 0; i < posts.size(); i++){
-                Post post = posts.get(i);
+            for (Post post : posts) {
                 fullPostDataList.add(new FullPostData(post, getComments(post.id), post.id));
             }
             return fullPostDataList;
@@ -35,11 +34,14 @@ public class GetData {
             BufferedReader br = new BufferedReader(CommentJson);
             Type type = new TypeToken<List<Comment>>() {
             }.getType();
-            List<Comment> comments = gson.fromJson(br, type);
-            for(int i = 0; i < comments.size(); i++) {
-                Comment comment = comments.get(i);
-                System.out.println(comment.author);
+            List<Comment> allComments = gson.fromJson(br, type);
+            List<Comment> comments = new ArrayList<>();
+            for (Comment comment : allComments) {
+                if (comment.postId == postId) {
+                    comments.add(comment);
+                }
             }
+
             return comments;
         }
     }

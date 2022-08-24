@@ -7,11 +7,13 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.genzedong.reddit.database.FullPostData;
 import org.genzedong.reddit.database.GetData;
-import org.genzedong.reddit.database.Post;
+import org.genzedong.website.gets.JsonRedditController;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
+
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Website {
     public static void runWebsite(int port) throws IOException {
@@ -20,13 +22,26 @@ public class Website {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonString);
         app.error(404, ctx -> ctx.json(jsonNode));
+        app.get("/json/reddit/{postId}", JsonRedditController::getPostId);
 
-        app.get("/reddit", new Reddit());
+        /*app.get("/reddit", new Reddit());
+app.routes(() -> {
+            path("/json/reddit", () -> {
+                get(UserController::getAllUsers);
+                post(UserController::createUser);
+                path(":id", () -> {
+                    get(UserController::getUser);
+                    patch(UserController::updateUser);
+                    delete(UserController::deleteUser);
+                });
+                ws("events", userController::webSocketEvents);
+            });
+        });
 
         List<FullPostData> postData = GetData.getData();
         for(int i = 0; i < postData.size(); i++) {
             app.get("/json/reddit/" + postData.get(i).id, new ViewPost(postData.get(i)));
-        }
+        }*/
     }
 
     private static class Reddit implements Handler {
@@ -34,8 +49,7 @@ public class Website {
         public void handle(@NotNull Context ctx) throws Exception {
             List<FullPostData> postData = GetData.getData();
             StringBuilder stringBuilder = new StringBuilder();
-            for(int i = 0; i < postData.size(); i++) {
-                FullPostData post = postData.get(i);
+            for (FullPostData post : postData) {
                 String comment;
                 try {
                     comment = post.comments.get(0).body;
