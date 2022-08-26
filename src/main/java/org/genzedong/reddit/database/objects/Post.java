@@ -1,4 +1,4 @@
-package org.genzedong.reddit.database;
+package org.genzedong.reddit.database.objects;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,7 +10,7 @@ public class Post {
     public String url;
     public String permalink;
     public String body;
-    public long createdTime;//created_utc
+    public long created_utc;//created_utc
     public int score;
     public int ups;
     public int downs;
@@ -23,7 +23,7 @@ public class Post {
         this.url = url;//new URL(url);
         this.permalink = permaLink;//new URL("https://www.reddit.com/" + permaLink);
         this.body = selfText;
-        this.createdTime = createdTime;
+        this.created_utc = createdTime;
         this.score = score;
         this.ups = ups;
         this.downs = downs;

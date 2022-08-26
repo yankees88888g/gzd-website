@@ -1,13 +1,13 @@
-package org.genzedong.reddit.database;
+package org.genzedong.reddit.database.objects;
 
 public class Comment {
 
     public String id;
     public String author;
     public String body;
-    public String parentCommentId;//parent_comment_id
-    public String postId; //post_id
-    public long createdTime;//created_utc
+    public String parent_comment_id;
+    public String post_id;
+    public long created_utc;
     public int score;
     public int ups;
     public int downs;
@@ -16,9 +16,9 @@ public class Comment {
         this.id = id;
         this.author = author;
         this.body = body;
-        this.parentCommentId = parentCommentId;
-        this.postId = postId;
-        this.createdTime = createdTime;
+        this.parent_comment_id = parentCommentId;
+        this.post_id = postId;
+        this.created_utc = createdTime;
         this.score = score;
         this.ups = ups;
         this.downs = downs;

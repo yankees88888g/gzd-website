@@ -1,4 +1,4 @@
-package org.genzedong.reddit.database;
+package org.genzedong.reddit.database.objects;
 
 import java.util.List;
 
