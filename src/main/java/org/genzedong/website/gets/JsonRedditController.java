@@ -16,8 +16,10 @@ public class JsonRedditController {
             if(post.id.contains(ctx.pathParam("postId"))){
                 obj.put("id", post.id);
                 obj.put("author", post.author);
+                obj.put("title", post.title);
                 obj.put("body", post.body);
                 obj.put("createdTime", post.created_utc);
+                obj.put("permalink", post.permalink);
                 obj.put("score", post.score);
                 obj.put("ups", post.ups);
                 obj.put("downs", post.downs);
