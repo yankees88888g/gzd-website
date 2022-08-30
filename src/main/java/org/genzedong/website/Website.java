@@ -39,6 +39,7 @@ public class Website {
         app.get("/json/reddit/{postId}", JsonRedditController::getPostId);
         app.get("/json/reddit/comments/{postId}", JsonRedditCommentController::getComments);
         app.get("/", new Index());
+        app.get("/discord", ctx -> ctx.redirect("https://discord.gg/mwdP9wfD2F"));
     }
 
     private static void inputStream(Context ctx, String file) {

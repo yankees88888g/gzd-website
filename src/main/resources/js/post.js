@@ -31,44 +31,24 @@ function loadPost(author, title, body, createdTime, downs, ups, score, url){
     document.getElementById("url").innerHTML = url;
 }
 
-function loadComment(author, body, id, parent_comment_id, created_utc, downs, ups, score){
+function loadComment(author, body, id, parentCommentId, created_utc, downs, ups, score, isSub){
 
-    const commentsElement = document.getElementById("comments");
-    const bottomElement = document.getElementById("bottom");
-    const authorElement = document.createElement("p");
-    const bodyElement = document.createElement("p");
-    const createdElement = document.createElement("p");
-    const upsElement = document.createElement("p");
-    const scoreElement = document.createElement("p");
-    const downsElement = document.createElement("p");  
+  renderComment(author, body, id, parentCommentId, created_utc, downs, ups, score, isSub);
 
-    authorElement.setAttribute("id", "author-" + id);
-    authorElement.appendChild(document.createTextNode(author));
-    commentsElement.after(authorElement);
+    if(isSub !== false || parentCommentId !== null) {
+      console.log(parentCommentId);
+      const pcId = document.getElementById("downs-" + parentCommentId); 
 
-    bodyElement.setAttribute("id", "author-body-" + id);
-    bodyElement.appendChild(document.createTextNode(body));
-    authorElement.after(bodyElement);
-
-    createdElement.setAttribute("id", "author-created-" + id);
-    createdElement.appendChild(document.createTextNode(unixToReadable(created_utc)));
-    bodyElement.after(createdElement);
-
-    upsElement.setAttribute("id", "author-ups-" + id);
-    upsElement.appendChild(document.createTextNode(ups));
-    createdElement.after(upsElement);
-    
-    scoreElement.setAttribute("id", "author-score-" + id);
-    scoreElement.appendChild(document.createTextNode(score));
-    upsElement.after(scoreElement);
-
-    downsElement.setAttribute("id", "author-downs-" + id);
-    downsElement.appendChild(document.createTextNode(downs));
-    commentsElement.after(downsElement);
+      const divElement = document.createElement("div");
+      divElement.setAttribute("id", "subCommentDiv-" + id);
+      pcId.after(divElement);
+    } else {
+      console.log(false);
+    }
 
   /*try {
   console.log(body);
-  const parent = document.getElementById(parent_comment_id);
+  const parent = document.getElementById(parentCommentId);
   parent.append(authorElement);
   }
   catch(err) {
@@ -87,6 +67,44 @@ function unixToReadable(timestamp) {
           ":" + date.getSeconds());
 }
 
+
+function renderComment(author, body, id, parentCommentId, created_utc, downs, ups, score, isSub){
+
+  const commentsElement = document.getElementById("comments");
+  const bottomElement = document.getElementById("bottom");
+  const authorElement = document.createElement("p");
+  const bodyElement = document.createElement("p");
+  const createdElement = document.createElement("p");
+  const upsElement = document.createElement("p");
+  const scoreElement = document.createElement("p");
+  const downsElement = document.createElement("p");  
+
+  authorElement.setAttribute("id", "author-" + id);
+  authorElement.appendChild(document.createTextNode(author));
+  commentsElement.after(authorElement);
+
+  bodyElement.setAttribute("id", "body-" + id);
+  bodyElement.appendChild(document.createTextNode(body));
+  authorElement.after(bodyElement);
+
+  createdElement.setAttribute("id", "created-" + id);
+  createdElement.appendChild(document.createTextNode(unixToReadable(created_utc)));
+  bodyElement.after(createdElement);
+
+  upsElement.setAttribute("id", "ups-" + id);
+  upsElement.appendChild(document.createTextNode(ups));
+  createdElement.after(upsElement);
+  
+  scoreElement.setAttribute("id", "score-" + id);
+  scoreElement.appendChild(document.createTextNode(score));
+  upsElement.after(scoreElement);
+
+  downsElement.setAttribute("id", "downs-" + id);
+  downsElement.appendChild(document.createTextNode(downs));
+  scoreElement.after(downsElement);
+
+}
+
 function onLoad(){
 
     const postId = getLastItem(window.location.href);
@@ -101,8 +119,7 @@ function onLoad(){
       //console.log(commentsList);
       for (const comment of commentsList) {
         console.log(comment);
-        loadComment(comment.author, comment.body, comment.id, comment.parent_comment_id, comment.createdTime, comment.downs, comment.ups, comment.score);
-      }
-
-    });
+        loadComment(comment.author, comment.body, comment.id, comment.parentCommentId, comment.createdTime, comment.downs, comment.ups, comment.score, comment.isSub);
+    }
+  });
 }

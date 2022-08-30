@@ -34,6 +34,11 @@ public class GetData {
             List<Comment> comments = new ArrayList<>();
             for (Comment comment : allComments) {
                     if (comment.post_id.equals(postId)) {
+                        if (comment.parent_comment_id == null){
+                            comment.subComment = false;
+                        } else {
+                            comment.subComment = true;
+                        }
                         comments.add(comment);
                     }
             }

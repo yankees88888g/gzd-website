@@ -25,6 +25,7 @@ public class JsonRedditCommentController {
             obj.put("parentCommentId", c.parent_comment_id);
             obj.put("ups", c.ups);
             obj.put("downs", c.downs);
+            obj.put("subcomment", c.subComment);
 
             arr.add(obj);
             obj = new JSONObject();

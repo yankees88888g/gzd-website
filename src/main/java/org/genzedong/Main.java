@@ -14,7 +14,7 @@ public class Main {
     public static HashMap<String, List<Comment>> commentData;
     public static void main(String[] args) throws IOException {
         postData = GetData.getPosts();
-        Website.runWebsite(1300);
+        Website.runWebsite(8080);
 
     }
 }

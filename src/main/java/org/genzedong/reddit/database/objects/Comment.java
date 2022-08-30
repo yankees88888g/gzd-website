@@ -1,5 +1,7 @@
 package org.genzedong.reddit.database.objects;
 
+import java.util.List;
+
 public class Comment {
 
     public String id;
@@ -11,8 +13,9 @@ public class Comment {
     public int score;
     public int ups;
     public int downs;
+    public boolean subComment;
 
-    public Comment (String id, String author, String body, String parentCommentId, String postId, long createdTime, int score, int ups, int downs){
+    public Comment (String id, String author, String body, String parentCommentId, String postId, long createdTime, int score, int ups, int downs, boolean subComments){
         this.id = id;
         this.author = author;
         this.body = body;
@@ -22,5 +25,6 @@ public class Comment {
         this.score = score;
         this.ups = ups;
         this.downs = downs;
+        this.subComment = subComments;
     }
 }
