@@ -20,6 +20,7 @@ import java.util.List;
 public class Website {
     public static void runWebsite(int port) throws IOException {
         Javalin app = Javalin.create(config -> {
+            config.enforceSsl = true;
             config.addStaticFiles(staticFiles -> {
                 staticFiles.hostedPath = "/css";
                 staticFiles.directory = "/css";
