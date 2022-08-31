@@ -6,6 +6,10 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.staticfiles.Location;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.genzedong.reddit.database.objects.FullPostData;
 import org.genzedong.reddit.database.GetData;
 import org.genzedong.website.gets.Index;
@@ -20,6 +24,15 @@ import java.util.List;
 public class Website {
     public static void runWebsite(int port) throws IOException {
         Javalin app = Javalin.create(config -> {
+            /*config.server(() -> {
+                Server server = new Server();
+                ServerConnector sslConnector = new ServerConnector(server, getSslContextFactory());
+                sslConnector.setPort(4443);
+                ServerConnector connector = new ServerConnector(server);
+                connector.setPort(8080);
+                server.setConnectors(new Connector[]{sslConnector, connector});
+                return server;
+            });*/
             config.enforceSsl = true;
             config.addStaticFiles(staticFiles -> {
                 staticFiles.hostedPath = "/css";
@@ -29,6 +42,11 @@ public class Website {
             config.addStaticFiles(staticFiles -> {
                 staticFiles.hostedPath = "/js";
                 staticFiles.directory = "/js";
+                staticFiles.location = Location.CLASSPATH;
+            });
+            config.addStaticFiles(staticFiles -> {
+                staticFiles.hostedPath = "/png";
+                staticFiles.directory = "/png";
                 staticFiles.location = Location.CLASSPATH;
             });
         }).start(port);
@@ -43,6 +61,13 @@ public class Website {
         app.get("/discord", ctx -> ctx.redirect("https://discord.gg/mwdP9wfD2F"));
     }
 
+
+    private static SslContextFactory.Server getSslContextFactory() {
+        SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
+        sslContextFactory.setKeyStorePath(Website.class.getResource("/keystore.jks").toExternalForm());
+        sslContextFactory.setKeyStorePassword("password");
+        return sslContextFactory;
+    }
     private static void inputStream(Context ctx, String file) {
     }
 
