@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import io.javalin.http.staticfiles.Location;
+import io.javalin.http.staticfiles.Location;import io.javalin.ssl.plugin.SSLPlugin;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -19,6 +19,7 @@ import org.genzedong.website.gets.RedditController;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Website {
@@ -32,19 +33,23 @@ public class Website {
                 connector.setPort(8080);
                 server.setConnectors(new Connector[]{sslConnector, connector});
                 return server;
-            });*/
-            config.enforceSsl = true;
-            config.addStaticFiles(staticFiles -> {
+        config.enforceSsl = false;
+            });
+            config.plugins.register(new SSLPlugin(ssl-> {
+                ssl.sslPort = 443;
+               ssl.pemFromPath(  "genzedong.org/cert.pem", Paths.get(System.getProperty("user.dir")).getParent() + "genzedong.org/key.pem");
+            }));*/
+            config.staticFiles.add(staticFiles -> {
                 staticFiles.hostedPath = "/css";
                 staticFiles.directory = "/css";
                 staticFiles.location = Location.CLASSPATH;
             });
-            config.addStaticFiles(staticFiles -> {
+            config.staticFiles.add(staticFiles -> {
                 staticFiles.hostedPath = "/js";
                 staticFiles.directory = "/js";
                 staticFiles.location = Location.CLASSPATH;
             });
-            config.addStaticFiles(staticFiles -> {
+            config.staticFiles.add(staticFiles -> {
                 staticFiles.hostedPath = "/png";
                 staticFiles.directory = "/png";
                 staticFiles.location = Location.CLASSPATH;
